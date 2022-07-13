@@ -1,0 +1,67 @@
+.form{
+  display: flex;
+  gap: .5rem;
+  margin-top: -1.6rem;
+}
+
+.input{
+  width: 100%;
+  background-color: var(--gray-500);
+  color: var(--gray-300);
+  border: 1px solid var(--gray-700);
+  outline: none;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.input:focus{
+  border: 1px solid var(--blue-300);
+}
+
+.btnCreate{
+  background-color: var(--blue-500);
+  color: var(--gray-100);
+  font-weight: bold;
+  font-size: 0.875rem;
+  padding: 1rem;
+  border-radius: 8px;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+
+  transition: .2s;
+}
+
+.btnCreateDisabled{
+  background-color: var(--gray-400);
+  color: var(--gray-100);
+  font-weight: bold;
+  font-size: 0.875rem;
+  padding: 1rem;
+  border-radius: 8px;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.btnCreate:hover{
+  background-color: var(--blue-300);
+}
+
+.taskList{
+  width: 100%;
+}
+
+.emptyListMessage > strong{
+  margin-top: 1rem;
+}
+
+.taskListItems{
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
