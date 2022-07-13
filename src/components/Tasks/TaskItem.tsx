@@ -1,4 +1,4 @@
-import React, { useState, ReactPropTypes, FC, ComponentProps } from "react";
+import { useState } from "react";
 import { Trash } from "phosphor-react";
 import styles from './TaskItem.module.css';
 
@@ -13,22 +13,20 @@ interface TaskProp{
   task: Tasks
   handleCheckTask: (task: Tasks) => void
   deleteTask: (item: Tasks) => void
-  tasksList: Tasks[]
+  tasks: Tasks[]
 }
 
 export function TaskItem(props: TaskProp) {
-  const [checked, setChecked] = useState(false);
-  const [tasksDone, setTasksDone] = useState(0);
   const [task, setTask] = useState({
     id: props.task.id,
-    isDone: checked,
+    isDone: false,
     message: props.task.message
   });
 
   function handleCheckTask(): void {
-    if(task.isDone === true)
+    if(task.isDone)
       setTask({...task, isDone: false});
-    if(task.isDone === false)
+    if(!task.isDone)
       setTask({...task, isDone: true});
     props.handleCheckTask(task);
   }

@@ -7,7 +7,6 @@ function App() {
       <header>
         <img src={logo} alt='to do logo' />
       </header>
-
       <Task />
     </div>
   )

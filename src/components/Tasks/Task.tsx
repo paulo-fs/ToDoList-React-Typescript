@@ -6,31 +6,18 @@ import { PlusCircle } from 'phosphor-react';
 import styles from "./Task.module.css";
 import { TasksHeader } from './TasksHeader';
 
-export function Task() {
-  const taskInitList = [
-    {
-      id: 0,
-      isDone: false,
-      message: 'init.'
-    },
-  ]
+interface Tasks {
+  id: number,
+  isDone: boolean,
+  message: string
+};
 
-  interface Tasks {
-    id: number,
-    isDone: boolean,
-    message: string
-  };
-  
-  const [tasksList, setTasksList] = useState(taskInitList);
+export function Task() {
+  const [tasks, setTasks] = useState<Tasks[]>([]);
   const [taskMessage, setTaskMessage] = useState('');
-  const [counter, setCounter] = useState(tasksList.length);
+  const [counter, setCounter] = useState(tasks.length);
   const [tasksDone, setTasksDone] = useState(0);
 
-  onload = () => {
-    setTasksList([]);
-  }
-  
-  
   function increaseConter(){
     setCounter(prevState => prevState += 1);
   }
@@ -45,7 +32,7 @@ export function Task() {
       message: taskMessage
     }
 
-    setTasksList([...tasksList, newTask])
+    setTasks([...tasks, newTask])
     setTaskMessage('');
   }
 
@@ -55,20 +42,16 @@ export function Task() {
   }
 
   function handleCheckTask(task: Tasks){
-    if(task.isDone === false)
-      setTasksDone(prevState => prevState + 1);
-    if(task.isDone === true)
-      setTasksDone(prevstate => prevstate -1);
+    if(task.isDone)
+      return setTasksDone(prevstate => prevstate -1);
+    setTasksDone(prevState => prevState + 1);
   }
 
   function deleteTask(task: Tasks){
-    const filteredTasks = tasksList.filter(item => item.id !== task.id);
-    setTasksList(filteredTasks);
-
-    if(task.isDone === false)
-      setTasksDone(prevState => prevState);
-    if(task.isDone === true)
-      setTasksDone(prevstate => prevstate -1);
+    const filteredTasks = tasks.filter(item => item.id !== task.id);
+    setTasks(filteredTasks);
+    if(task.isDone)
+      return setTasksDone(prevstate => prevstate -1);
   }
 
   function handleInvalidInput(event: InvalidEvent<HTMLInputElement>) {
@@ -93,22 +76,22 @@ export function Task() {
         </button>
       </form>
 
-      <TasksHeader length={tasksList.length} tasksDone={tasksDone} />
+      <TasksHeader length={tasks.length} tasksDone={tasksDone} />
 
       <section className={styles.taskList}>
-        { tasksList.length === 0 && <NoTasks /> }
+        { tasks.length === 0 && <NoTasks /> }
         {
-          tasksList.length !== 0 && 
+          tasks.length !== 0 && 
           <ul className={styles.taskListItems}>
             {
-              tasksList.map((task) => {
+              tasks.map((task) => {
                 return (
                   <TaskItem 
                     key={task.id}
                     task={task} 
                     handleCheckTask={handleCheckTask}
                     deleteTask={deleteTask}
-                    tasksList={tasksList}
+                    tasks={tasks}
                   />)
               })
             }
