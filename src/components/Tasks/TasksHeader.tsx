@@ -1,20 +1,20 @@
+import { useContext } from "react";
+import { TasksContext } from "../contexts/TasksContext";
 import styles from "./TasksHeader.module.css";
 
-interface Props{
-  length: number;
-  tasksDone: number;
-}
 
-export function TasksHeader(props: Props) {
+export function TasksHeader() {
+  const { tasks, tasksDoneCounter } = useContext(TasksContext)
+
   return (
     <section className={styles.tasksInfo}>
       <div className={styles.createdTasks}>
         <p>Tarefas criadas</p>
-        <span>{props.length}</span>
+        <span>{tasks.length}</span>
       </div>
       <div className={styles.completedTasks}>
         <p>Concluídas</p>
-        <span>{`${props.tasksDone} de ${props.length}`}</span>
+        <span>{`${tasksDoneCounter} de ${tasks.length}`}</span>
       </div>
     </section>
   );

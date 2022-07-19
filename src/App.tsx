@@ -1,4 +1,5 @@
 import logo from './assets/logo.svg';
+import { TasksContextProvider } from './components/contexts/TasksContext';
 import { Task } from './components/Tasks/Task';
 
 function App() {
@@ -7,7 +8,9 @@ function App() {
       <header>
         <img src={logo} alt='to do logo' />
       </header>
-      <Task />
+      <TasksContextProvider>
+        <Task />
+      </TasksContextProvider>
     </div>
   )
 }

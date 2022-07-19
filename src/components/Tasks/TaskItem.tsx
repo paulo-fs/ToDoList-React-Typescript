@@ -1,38 +1,24 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Trash } from "phosphor-react";
 import styles from './TaskItem.module.css';
+import { TasksContext, TasksType } from "../contexts/TasksContext";
 
-interface Tasks {
-  id: number,
-  isDone: boolean,
-  message: string
-};
-
-interface TaskProp{
-  key: number
-  task: Tasks
-  handleCheckTask: (task: Tasks) => void
-  deleteTask: (item: Tasks) => void
-  tasks: Tasks[]
+interface TaskItemProp{
+  task: TasksType
 }
 
-export function TaskItem(props: TaskProp) {
-  const [task, setTask] = useState({
-    id: props.task.id,
-    isDone: false,
-    message: props.task.message
-  });
+export function TaskItem({ task }: TaskItemProp) {
+  const {
+    deleteTask,
+    checkDoneTasks
+  } = useContext(TasksContext);
 
-  function handleCheckTask(): void {
-    if(task.isDone)
-      setTask({...task, isDone: false});
-    if(!task.isDone)
-      setTask({...task, isDone: true});
-    props.handleCheckTask(task);
+  function handleCheckTask() {
+    checkDoneTasks(task);
   }
 
   function handleDeleteTask(){
-    props.deleteTask(task);
+    deleteTask(task);
   }
 
   return (
@@ -43,7 +29,7 @@ export function TaskItem(props: TaskProp) {
         >••</button>
       <div className={styles.container}>
         <p className={task.isDone ? styles.done : styles.notDone}>
-          {props.task.message}
+          {task.message}
         </p>
         <button className={styles.btnDelete} onClick={handleDeleteTask}>
           <Trash size={20} />

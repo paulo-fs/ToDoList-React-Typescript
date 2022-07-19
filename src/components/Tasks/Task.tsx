@@ -1,30 +1,30 @@
-import { useState, ChangeEvent, FormEvent, InvalidEvent, } from 'react';
+import { useState, ChangeEvent, FormEvent, InvalidEvent, useContext, } from 'react';
 import { NoTasks } from '../NoTasks/NoTasks';
 import { TaskItem } from './TaskItem';
 
 import { PlusCircle } from 'phosphor-react';
 import styles from "./Task.module.css";
 import { TasksHeader } from './TasksHeader';
+import { TasksContext } from '../contexts/TasksContext';
 
-interface Tasks {
-  id: number,
-  isDone: boolean,
-  message: string
-};
 
 export function Task() {
-  const [tasks, setTasks] = useState<Tasks[]>([]);
-  const [taskMessage, setTaskMessage] = useState('');
-  const [counter, setCounter] = useState(tasks.length);
-  const [tasksDone, setTasksDone] = useState(0);
+  const {
+    tasks,
+    taskMessage,
+    tasksDoneCounter,
+    createNewTask,
+    getTaskTitle
+  } = useContext(TasksContext);
+  const [counter, setCounter] = useState(0);
 
-  function increaseConter(){
+  function createTaskId(){
     setCounter(prevState => prevState += 1);
   }
 
   function handleSubmit(event: FormEvent){
     event.preventDefault();
-    increaseConter();
+    createTaskId();
 
     const newTask = {
       id: counter,
@@ -32,26 +32,13 @@ export function Task() {
       message: taskMessage
     }
 
-    setTasks([...tasks, newTask])
-    setTaskMessage('');
+    createNewTask(newTask);
+    getTaskTitle('');
   }
 
   function handleMessageChange(event: ChangeEvent<HTMLInputElement>){
     event.target.setCustomValidity('')
-    setTaskMessage(event.target.value);
-  }
-
-  function handleCheckTask(task: Tasks){
-    if(task.isDone)
-      return setTasksDone(prevstate => prevstate -1);
-    setTasksDone(prevState => prevState + 1);
-  }
-
-  function deleteTask(task: Tasks){
-    const filteredTasks = tasks.filter(item => item.id !== task.id);
-    setTasks(filteredTasks);
-    if(task.isDone)
-      return setTasksDone(prevstate => prevstate -1);
+    getTaskTitle(event.target.value);
   }
 
   function handleInvalidInput(event: InvalidEvent<HTMLInputElement>) {
@@ -76,7 +63,7 @@ export function Task() {
         </button>
       </form>
 
-      <TasksHeader length={tasks.length} tasksDone={tasksDone} />
+      <TasksHeader />
 
       <section className={styles.taskList}>
         { tasks.length === 0 && <NoTasks /> }
@@ -89,9 +76,6 @@ export function Task() {
                   <TaskItem 
                     key={task.id}
                     task={task} 
-                    handleCheckTask={handleCheckTask}
-                    deleteTask={deleteTask}
-                    tasks={tasks}
                   />)
               })
             }
