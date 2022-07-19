@@ -10,11 +10,11 @@ export function TasksHeader() {
     <section className={styles.tasksInfo}>
       <div className={styles.createdTasks}>
         <p>Tarefas criadas</p>
-        <span>{tasks.length}</span>
+        <span>{tasks && tasks.length}</span>
       </div>
       <div className={styles.completedTasks}>
         <p>Concluídas</p>
-        <span>{`${tasksDoneCounter} de ${tasks.length}`}</span>
+        <span>{`${tasksDoneCounter} de ${tasks && tasks.length}`}</span>
       </div>
     </section>
   );

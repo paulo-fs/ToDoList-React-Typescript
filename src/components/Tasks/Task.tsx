@@ -12,7 +12,6 @@ export function Task() {
   const {
     tasks,
     taskMessage,
-    tasksDoneCounter,
     createNewTask,
     getTaskTitle
   } = useContext(TasksContext);
@@ -66,9 +65,9 @@ export function Task() {
       <TasksHeader />
 
       <section className={styles.taskList}>
-        { tasks.length === 0 && <NoTasks /> }
+        { tasks && tasks.length === 0 && <NoTasks /> }
         {
-          tasks.length !== 0 && 
+          tasks &&
           <ul className={styles.taskListItems}>
             {
               tasks.map((task) => {

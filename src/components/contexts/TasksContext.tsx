@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { boolean } from "zod";
 
 export interface TasksType {
   id: number,
@@ -10,7 +11,7 @@ interface TasksContextType{
   tasks: TasksType[]
   taskMessage: string
   tasksDoneCounter: number
-  checkDoneTasks: (task: TasksType) => void
+  countDoneTasks: (done: number) => void
   createNewTask: (task: TasksType) => void
   getTaskTitle: (message: string) => void
   deleteTask: (task: TasksType) => void
@@ -26,20 +27,10 @@ export function TasksContextProvider({ children }: TasksContextProps){
   const [tasks, setTasks] = useState<TasksType[]>([]);
   const [taskMessage, setTaskMessage] = useState('');
   const [tasksDoneCounter, setTasksDoneCounter] = useState(0);
+  
 
-  function checkDoneTasks(task: TasksType){
-    const taskId = task.id;
-    const checkedTasks = tasks.filter(item => {
-      if(item.id === taskId){
-        return task.isDone
-        ? task.isDone = false
-        : task.isDone = true
-      }
-      return item;
-    });
-
-    setTasks(checkedTasks)
-    // setTasksDoneCounter(prevState => prevState + (task))
+  function countDoneTasks(done: number){
+    setTasksDoneCounter(prevState => prevState + done);
   }
 
   function createNewTask(newTask: TasksType){
@@ -53,8 +44,6 @@ export function TasksContextProvider({ children }: TasksContextProps){
   function deleteTask(task: TasksType){
     const filteredTasks = tasks.filter(item => item.id !== task.id);
     setTasks(filteredTasks);
-    if(task.isDone)
-      return setTasksDoneCounter(prevstate => prevstate -1);
   }
 
   return(
@@ -62,7 +51,7 @@ export function TasksContextProvider({ children }: TasksContextProps){
       tasks,
       taskMessage,
       tasksDoneCounter,
-      checkDoneTasks,
+      countDoneTasks,
       createNewTask,
       getTaskTitle,
       deleteTask
