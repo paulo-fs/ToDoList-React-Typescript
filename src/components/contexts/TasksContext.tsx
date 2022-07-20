@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useEffect, useReducer, useState } from "react";
-import { boolean } from "zod";
+import { createContext, ReactNode, useReducer, useState } from "react";
+import { ActionTypes, addNewTaskAction, deleteTaskAction, setTaskMessageAction } from "../../reducers/taskActions";
+import { tasksReducer } from "../../reducers/tasksReducer";
 
 export interface TasksType {
   id: number,
@@ -21,91 +22,30 @@ interface TasksContextProps {
   children: ReactNode
 }
 
-interface TasksState{
-  tasks: TasksType[]
-  taskMessage: string
-}
-
 export const TasksContext = createContext({} as TasksContextType);
 
 export function TasksContextProvider({ children }: TasksContextProps){
-  // const [tasks, setTasks] = useState<TasksType[]>([]);
-  // const [taskMessage, setTaskMessage] = useState('');
   const [tasksDoneCounter, setTasksDoneCounter] = useState(0);
-
-  // const [tasks, dispatch ] = useReducer((state: TasksType[], action: any) => {
-  //   if(action.type === 'ADD_NEW_TASK'){
-  //     return [...state, action.payload.newTask]
-  //   }
-  //   if(action.type === 'DELETE_TASK'){
-  //     return state.filter(item => item.id !== action.payload.task.id)
-  //   }
-  //   return state;
-  // }, [])
-
-  const [tasksState, dispatch ] = useReducer((state: TasksState, action: any) => {
-    if(action.type === 'ADD_NEW_TASK'){
-      return {
-        ...state,
-        tasks: [...state.tasks, action.payload.newTask]
-      }
-    }
-    if(action.type === 'DELETE_TASK'){
-      return {
-        ...state,
-        tasks: state.tasks.filter(item => item.id !== action.payload.task.id)
-      }
-    }
-    if(action.type === 'SET_TASK_MESSAGE'){
-      return {
-        ...state,
-        taskMessage: action.payload.message
-      }
-    }
-    return state;
-  }, {
+  const [tasksState, dispatch ] = useReducer(tasksReducer, {
     tasks: [],
     taskMessage: '',
   })
-
   const { tasks, taskMessage } = tasksState;
-  
 
   function countDoneTasks(done: number){
     setTasksDoneCounter(prevState => prevState + done);
   }
 
   function createNewTask(newTask: TasksType){
-    // setTasks([...tasks, newTask]);
-
-    dispatch({
-      type: 'ADD_NEW_TASK',
-      payload: {
-        newTask
-      }
-    });
+    dispatch(addNewTaskAction(newTask));
   }
 
   function setTaskMessage(message: string){
-    // setTaskMessage(message);
-    dispatch({
-      type: 'SET_TASK_MESSAGE',
-      payload: {
-        message
-      }
-    })
+    dispatch(setTaskMessageAction(message))
   }
 
   function deleteTask(task: TasksType){
-    // const filteredTasks = tasks.filter(item => item.id !== task.id);
-    // setTasks(filteredTasks);
-
-    dispatch({
-      type: 'DELETE_TASK',
-      payload: {
-        task
-      }
-    })
+    dispatch(deleteTaskAction(task))
   }
 
   return(
