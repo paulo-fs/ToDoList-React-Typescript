@@ -13,31 +13,25 @@ export function Task() {
     tasks,
     taskMessage,
     createNewTask,
-    getTaskTitle
+    setTaskMessage
   } = useContext(TasksContext);
-  const [counter, setCounter] = useState(0);
-
-  function createTaskId(){
-    setCounter(prevState => prevState += 1);
-  }
 
   function handleSubmit(event: FormEvent){
     event.preventDefault();
-    createTaskId();
 
     const newTask = {
-      id: counter,
+      id: Number(new Date().getTime()),
       isDone: false,
       message: taskMessage
     }
 
     createNewTask(newTask);
-    getTaskTitle('');
+    setTaskMessage('');
   }
 
   function handleMessageChange(event: ChangeEvent<HTMLInputElement>){
     event.target.setCustomValidity('')
-    getTaskTitle(event.target.value);
+    setTaskMessage(event.target.value);
   }
 
   function handleInvalidInput(event: InvalidEvent<HTMLInputElement>) {
