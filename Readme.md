@@ -2,10 +2,22 @@
 
 This study project is a To Do List made to practice some learnings about React. Despite the size of the application, some important concepts were used, such as:
 - States
+- Global state managment
 - State immutability
 - Lists and keys
 - Properties
 - Componentization
+
+
+## Resources used
+
+- vite
+- React
+- TypeScript
+- CSS Modules
+- useState
+- useReducer
+- Context API
 
 
 ## About this small project
