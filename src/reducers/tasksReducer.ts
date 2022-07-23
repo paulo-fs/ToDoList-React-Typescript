@@ -23,6 +23,16 @@ export function tasksReducer(state: TasksState, action: any){
         ...state,
         taskMessage: action.payload.message
       }
+    case ActionTypes.SET_TASK_DONE:
+      return {
+        ... state,
+        tasks: state.tasks.map(item => {
+          if(item.id === action.payload.newDoneTask.id){
+            return action.payload.newDoneTask;
+          }
+          return item;
+        })
+      }
     default:
       return state;
   }

@@ -1,5 +1,5 @@
-import { createContext, ReactNode, useReducer, useState } from "react";
-import { ActionTypes, addNewTaskAction, deleteTaskAction, setTaskMessageAction } from "../../reducers/taskActions";
+import { createContext, ReactNode, useReducer } from "react";
+import { addNewTaskAction, deleteTaskAction, setTaskDoneAction, setTaskMessageAction } from "../../reducers/taskActions";
 import { tasksReducer } from "../../reducers/tasksReducer";
 
 export interface TasksType {
@@ -11,11 +11,10 @@ export interface TasksType {
 interface TasksContextType{
   tasks: TasksType[]
   taskMessage: string
-  tasksDoneCounter: number
-  countDoneTasks: (done: number) => void
-  createNewTask: (task: TasksType) => void
+  createNewTask: () => void
   setTaskMessage: (message: string) => void
   deleteTask: (task: TasksType) => void
+  setTasksDone: (taskDone: TasksType) => void
 }
 
 interface TasksContextProps {
@@ -25,18 +24,18 @@ interface TasksContextProps {
 export const TasksContext = createContext({} as TasksContextType);
 
 export function TasksContextProvider({ children }: TasksContextProps){
-  const [tasksDoneCounter, setTasksDoneCounter] = useState(0);
   const [tasksState, dispatch ] = useReducer(tasksReducer, {
     tasks: [],
     taskMessage: '',
   })
   const { tasks, taskMessage } = tasksState;
 
-  function countDoneTasks(done: number){
-    setTasksDoneCounter(prevState => prevState + done);
-  }
-
-  function createNewTask(newTask: TasksType){
+  function createNewTask(){
+    const newTask = {
+      id: Number(new Date().getTime()),
+      isDone: false,
+      message: taskMessage
+    }
     dispatch(addNewTaskAction(newTask));
   }
 
@@ -48,15 +47,23 @@ export function TasksContextProvider({ children }: TasksContextProps){
     dispatch(deleteTaskAction(task))
   }
 
+  function setTasksDone(doneTask: TasksType){
+    const done = doneTask.isDone;
+    const newDoneTask = {
+      ...doneTask,
+      isDone: !done
+    }
+    dispatch(setTaskDoneAction(newDoneTask));
+  }
+
   return(
     <TasksContext.Provider value={{
       tasks,
       taskMessage,
-      tasksDoneCounter,
-      countDoneTasks,
       createNewTask,
       setTaskMessage,
-      deleteTask
+      deleteTask,
+      setTasksDone
     }}>
       { children }
     </TasksContext.Provider>

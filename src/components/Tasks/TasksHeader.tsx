@@ -4,7 +4,8 @@ import styles from "./TasksHeader.module.css";
 
 
 export function TasksHeader() {
-  const { tasks, tasksDoneCounter } = useContext(TasksContext)
+  const { tasks } = useContext(TasksContext);
+  const doneTasksCounter = tasks.filter(item => item.isDone === true).length;
 
   return (
     <section className={styles.tasksInfo}>
@@ -14,7 +15,7 @@ export function TasksHeader() {
       </div>
       <div className={styles.completedTasks}>
         <p>Concluídas</p>
-        <span>{`${tasksDoneCounter} de ${tasks && tasks.length}`}</span>
+        <span>{`${doneTasksCounter} de ${tasks && tasks.length}`}</span>
       </div>
     </section>
   );

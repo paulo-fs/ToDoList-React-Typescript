@@ -3,7 +3,8 @@ import { TasksType } from "../components/contexts/TasksContext";
 export enum ActionTypes{
   ADD_NEW_TASK = 'ADD_NEW_TASK',
   DELETE_TASK = 'DELETE_TASK',
-  SET_TASK_MESSAGE = 'SET_TASK_MESSAGE'
+  SET_TASK_MESSAGE = 'SET_TASK_MESSAGE',
+  SET_TASK_DONE = 'SET_TASK_DONE'
 }
 
 export function addNewTaskAction(newTask: TasksType){
@@ -29,6 +30,15 @@ export function setTaskMessageAction (message: string){
     type: ActionTypes.SET_TASK_MESSAGE,
     payload: {
       message
+    }
+  }
+}
+
+export function setTaskDoneAction(newDoneTask: TasksType){
+  return {
+    type: ActionTypes.SET_TASK_DONE,
+    payload: {
+      newDoneTask
     }
   }
 }

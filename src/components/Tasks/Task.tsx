@@ -1,12 +1,11 @@
-import { useState, ChangeEvent, FormEvent, InvalidEvent, useContext, } from 'react';
+import { ChangeEvent, FormEvent, InvalidEvent, useContext, } from 'react';
 import { NoTasks } from '../NoTasks/NoTasks';
 import { TaskItem } from './TaskItem';
-
-import { PlusCircle } from 'phosphor-react';
-import styles from "./Task.module.css";
 import { TasksHeader } from './TasksHeader';
 import { TasksContext } from '../contexts/TasksContext';
 
+import { PlusCircle } from 'phosphor-react';
+import styles from "./Task.module.css";
 
 export function Task() {
   const {
@@ -18,14 +17,7 @@ export function Task() {
 
   function handleSubmit(event: FormEvent){
     event.preventDefault();
-
-    const newTask = {
-      id: Number(new Date().getTime()),
-      isDone: false,
-      message: taskMessage
-    }
-
-    createNewTask(newTask);
+    createNewTask();
     setTaskMessage('');
   }
 
@@ -66,10 +58,7 @@ export function Task() {
             {
               tasks.map((task) => {
                 return (
-                  <TaskItem 
-                    key={task.id}
-                    task={task} 
-                  />)
+                  <TaskItem key={task.id} task={task} />)
               })
             }
           </ul>
